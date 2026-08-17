@@ -1,0 +1,61 @@
+# Site identity & theme -- edited by maintainers, consumed by build.mjs.
+# No packages required: the build reads this with a small YAML subset parser
+# (top-level keys, plus one nested map under "colors:" for dark/light).
+#
+# After editing, re-run ./serve.sh (or node build.mjs) to see changes.
+#
+# Colors are drawn from the Duke University identity palette:
+#   Navy #012169, Royal #00539B, Prussian #005587, Shale #0577B1
+#   Persimmon #E89923, Dandelion #FFD960, Copper #C84E00
+#   Cast Iron #262626, Graphite #666666, Granite #B5B5B5
+#   Hatteras #E2E6ED, Whisper Gray #F3F2F1, Limestone #E5E5E5
+
+name: Duke University Debating Society
+short_name: Duke Debate
+brand_name: Duke Debate
+brand_sub: ""
+description: "Founded in 1897, Duke Debate competes in British Parliamentary debate at tournaments across the country and around the world."
+footer_note: "Student organization at Duke University"
+
+# Palette: CSS custom properties. Keys map to --color-<key> (underscores
+# become hyphens). glow_accent / glow_secondary also set --glow-teal /
+# --glow-amber (used by the stylesheet for background washes).
+colors:
+  # Dark theme: Navy-grounded surfaces, Royal/Shale accents, warm secondary.
+  dark:
+    bg: "#010d24"
+    bg_raised: "#012169"
+    bg_inset: "#010a1c"
+    border: "#005587"
+    text: "#E2E6ED"
+    text_muted: "#B5B5B5"
+    accent: "#0577B1"
+    accent_strong: "#3398d6"
+    secondary: "#FFD960"
+    danger: "#C84E00"
+    header_bg: "rgba(1, 33, 105, 0.92)"
+    surface_hover: "rgba(5, 119, --7, 0.16)"
+    strong: "#FFFFFF"
+    accent_contrast: "#FFFFFF"
+    scrim: "rgba(1, 13, 36, 0.65)"
+    glow_accent: "rgba(5, 119, --7, 0.18)"
+    glow_secondary: "rgba(255, 217, 96, 0.10)"
+  # Light theme: Whisper/Hatteras grounds, Navy primary, Persimmon secondary.
+  light:
+    bg: "#F3F2F1"
+    bg_raised: "#FFFFFF"
+    bg_inset: "#E2E6ED"
+    border: "#B5B5B5"
+    text: "#262626"
+    text_muted: "#666666"
+    accent: "#012169"
+    accent_strong: "#00539B"
+    secondary: "#E89923"
+    danger: "#C84E00"
+    header_bg: "rgba(255, 255, 255, 0.92)"
+    surface_hover: "rgba(1, 33, 105, 0.06)"
+    strong: "#262626"
+    accent_contrast: "#FFFFFF"
+    scrim: "rgba(38, 38, 38, 0.40)"
+    glow_accent: "rgba(1, 33, 105, 0.08)"
+    glow_secondary: "rgba(232, 153, 35, 0.10)"

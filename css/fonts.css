@@ -1,0 +1,78 @@
+/* Self-hosted Latin subsets: EB Garamond (display) + Open Sans (body).
+   Downloaded from Fontsource; no runtime CDN dependency. */
+
+/* Metric-matched local fallback so Palatino/Georgia occupy the same width as
+   EB Garamond during font-display:swap. Without this, the navbar wordmark
+   paints ~13% too large, then snaps down when the webfont arrives. */
+@font-face {
+  font-family: "EB Garamond Fallback";
+  src: local("Palatino"), local("Palatino Linotype"), local("Georgia");
+  size-adjust: 88.37%;
+  ascent-override: 113.95%;
+  descent-override: 33.72%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/eb-garamond-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/eb-garamond-400-italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/assets/fonts/eb-garamond-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/eb-garamond-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/open-sans-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/open-sans-400-italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/assets/fonts/open-sans-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/open-sans-700-normal.woff2") format("woff2");
+}

@@ -1,0 +1,75 @@
+# ---------------------------------------------------------------------------
+# Build the site from content/*.md and publish it to GitHub Pages.
+#
+# One-time repo setup this workflow assumes:
+#   Settings -> Pages -> Source = "GitHub Actions"
+# Without that, the deploy job fails: the branch-based Pages publisher does not
+# accept an artifact from Actions.
+#
+# A custom domain (the plan is duke-debate.com) is configured in Settings ->
+# Pages, NOT with a CNAME file in the repo. Artifact-based publishing does not
+# preserve a CNAME file, so adding one here would do nothing. Root-relative
+# URLs already work on dukedebate.github.io and will keep working on a custom
+# domain.
+# ---------------------------------------------------------------------------
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    # MUST match this repository's DEFAULT branch. If these disagree the
+    # workflow simply never runs -- no build, no deploy, and no error anywhere
+    # to tell you why the site stopped updating. Re-check this line if the
+    # default branch is ever renamed.
+    branches: [main]
+  workflow_dispatch: # lets you re-publish by hand without a push
+
+permissions:
+  contents: read # checkout
+  pages: write # create a Pages deployment
+  id-token: write # OIDC token deploy-pages exchanges for that permission
+
+# One Pages deployment at a time. cancel-in-progress stays FALSE on purpose:
+# cancelling mid-publish is how you get a half-deployed site, and a queued run
+# costs only time.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Node is the ONLY toolchain needed: build.mjs uses nothing but Node
+      # builtins, so there is no package.json, no lockfile, and deliberately no
+      # `npm install` step below.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build static site (zero deps -- no npm install)
+        run: node build.mjs # writes ./dist
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    # Names the deployment in the repo's Environments UI and surfaces the live
+    # URL on the run summary.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

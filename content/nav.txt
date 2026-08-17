@@ -1,0 +1,20 @@
+# Duke Debate -- navigation order
+# ---------------------------------------------------------------------------
+# One entry per line:
+#     slug
+#     slug | Custom Label
+#     https://example.com/path | External Label
+# External http(s) URLs open in a new tab with a ^ marker; a label is required.
+# "#" comments and blank lines are ignored.
+# ---------------------------------------------------------------------------
+
+home | Home
+about | About
+join | Join
+competition | Competition
+leadership | Leadership
+alumni | Alumni
+donate | Donate
+photos | Photos
+contact | Contact
+https://drive.google.com/drive/folders/1ZjWPrfqRRBA9DkMs02MrIofBjGpRHlPK?usp=sharing | Team Resources

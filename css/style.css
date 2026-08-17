@@ -1,0 +1,1124 @@
+/* =========================================================================
+   Aurora Robotics Club -- design system
+   -------------------------------------------------------------------------
+   THEMING: colors, spacing, and type are CSS custom properties. To re-skin the
+   whole site, edit the variables in :root (dark) and html[data-theme="light"]
+   (light) below -- that is the "few-line edit" for a new palette. Almost nothing
+   else uses raw hex. The only intentional exceptions are a handful of
+   theme-INDEPENDENT overlays that must stay dark in BOTH themes -- the lightbox
+   "theater" backdrop and its pinned text/border vars, and the photo-tile caption
+   scrim. Those are deliberately hard-coded and commented where they appear;
+   leave them unless you're restyling those overlays specifically.
+   NOTE -- the mobile-menu backdrop scrim (--color-scrim) is the opposite case:
+   it IS theme-dependent (defined in BOTH :root and the light block) because a
+   veil tuned for a dark page looks wrong over a light one. It is a themed
+   variable like the palette, not one of the fixed always-dark overlays above.
+   ========================================================================= */
+
+:root {
+  /* --- Color palette (deep "midnight lab" base + teal / amber accents) ---
+     This :root block is the DARK theme (the site default). A matching light
+     palette lives in the html[data-theme="light"] block just below; it only
+     needs to override the variables that actually change. Everything else in
+     this stylesheet references these variables, never raw hex, so re-skinning
+     or adding a theme is a small, contained edit. */
+  --color-bg:            #0b1120;   /* page background */
+  --color-bg-raised:     #121a2e;   /* cards, header, footer */
+  --color-bg-inset:      #0e1526;   /* code blocks, table stripes */
+  --color-border:        #24304d;   /* hairlines */
+  --color-text:          #e7ecf5;   /* primary text */
+  --color-text-muted:    #9aa7c2;   /* secondary text */
+  --color-accent:        #38e0c8;   /* primary accent (teal) */
+  --color-accent-strong: #16b6a0;   /* accent hover / links */
+  --color-secondary:     #f5b544;   /* warm amber accent */
+  --color-danger:        #ff7a7a;   /* error UI */
+
+  /* Surface tints that used to be hard-coded rgba() values. Promoted to
+     variables so the light theme can override them (see below). */
+  --color-header-bg:       rgba(18, 26, 46, 0.85);  /* sticky header glass */
+  --color-surface-hover:   rgba(255, 255, 255, 0.04); /* nav-link hover wash */
+  --color-strong:          #fff;      /* **bold** emphasis text */
+  --color-accent-contrast: #04231f;   /* ink on top of an accent fill */
+  /* Dimming scrim behind the OPEN mobile menu (dark theme). Unlike the
+     always-dark lightbox/caption overlays noted in the file header, this one is
+     THEME-DEPENDENT: a value tuned for a dark page over-darkens a light one, so
+     the light theme overrides it below. Kept moderate so the darkening reads
+     correctly on its own where backdrop-filter (blur) is unsupported. */
+  --color-scrim: rgba(4, 8, 18, 0.55);
+  /* Two soft background glows, kept as variables so light mode can soften them. */
+  --glow-teal:  rgba(56, 224, 200, 0.10);
+  --glow-amber: rgba(245, 181, 68, 0.08);
+
+  /* --- Spacing scale (rem-based, 4px grid) --- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+
+  /* --- Type scale ---
+     Display: EB Garamond (serif headings/brand)
+     Body: Open Sans (UI + paragraph text)
+     Pairing from the Duke Debate type options; self-hosted in /assets/fonts. */
+  --font-display: "EB Garamond", "EB Garamond Fallback", Palatino, Georgia, serif;
+  --font-body:    "Open Sans", "Segoe UI", "Helvetica Neue", Helvetica, sans-serif;
+  --font-mono:    "Courier New", ui-monospace, Menlo, Consolas, monospace;
+  --fs-eyebrow: 0.78rem;
+  --fs-base:    1rem;
+  --fs-lg:      1.15rem;
+  --fs-h4:      1.1rem;
+  --fs-h3:      1.4rem;
+  --fs-h2:      1.9rem;
+  --fs-h1:      2.6rem;
+  --fs-hero:    clamp(2.4rem, 6vw, 3.8rem);
+
+  /* --- Shape & depth --- */
+  --radius:     12px;
+  --radius-sm:  8px;
+  --shadow:     0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-lg:  0 24px 60px rgba(0, 0, 0, 0.55);
+  --maxw:       1080px;
+  --header-h:   64px;
+}
+
+/* =========================================================================
+   LIGHT THEME
+   -------------------------------------------------------------------------
+   Applied when <html data-theme="light">. The inline bootstrap in index.html
+   sets data-theme before first paint (from a saved choice or the OS
+   prefers-color-scheme), and the theme-toggle button flips it at runtime.
+   Only the values that differ from the dark default are overridden here --
+   the type scale, spacing, and shape stay shared. Colors were picked for
+   WCAG-AA body-text contrast on the light surfaces (accent darkened so teal
+   links/borders remain legible on white).
+   ========================================================================= */
+html[data-theme="light"] {
+  --color-bg:            #f4f7fb;   /* page background (soft cool white) */
+  --color-bg-raised:     #ffffff;   /* cards, header, footer */
+  --color-bg-inset:      #eef2f8;   /* code blocks, table stripes */
+  --color-border:        #d3dbe8;   /* hairlines */
+  --color-text:          #16202e;   /* primary text (near-black slate) */
+  --color-text-muted:    #566175;   /* secondary text (AA on light bg) */
+  --color-accent:        #0f9e8b;   /* darkened teal -- legible on white */
+  --color-accent-strong: #0b7d6e;   /* link hover (darker still) */
+  --color-secondary:     #b9761a;   /* darkened amber for text/borders */
+  --color-danger:        #c0392b;   /* error UI, readable on light */
+
+  --color-header-bg:       rgba(255, 255, 255, 0.85);
+  --color-surface-hover:   rgba(15, 23, 42, 0.05);
+  --color-strong:          #000;
+  --color-accent-contrast: #ffffff;  /* white ink on the accent fill */
+  /* Menu scrim, retuned for the light theme: a slate-tinted veil (not the dark
+     theme's near-black, which would look like a heavy shadow on a light page).
+     Slightly higher alpha because a light page needs more dimming to read as
+     "pushed back" behind the raised menu panel. */
+  --color-scrim: rgba(22, 32, 46, 0.38);
+  --glow-teal:  rgba(15, 158, 139, 0.08);
+  --glow-amber: rgba(185, 118, 26, 0.07);
+
+  /* Softer shadows: heavy black drop-shadows look muddy on a light page. */
+  --shadow:    0 8px 24px rgba(22, 32, 46, 0.10);
+  --shadow-lg: 0 20px 50px rgba(22, 32, 46, 0.18);
+}
+
+/* --- Reset / base --- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.65;
+  color: var(--color-text);
+  background: var(--color-bg);
+  /* Subtle layered radial glow so the background is never a flat solid.
+     Glow colors are themed variables so light mode can soften them. */
+  background-image:
+    radial-gradient(60rem 40rem at 12% -10%, var(--glow-teal), transparent 60%),
+    radial-gradient(50rem 40rem at 100% 0%, var(--glow-amber), transparent 55%);
+  background-attachment: fixed;
+  /* Repaint smoothly when the palette flips between light and dark. */
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover { color: var(--color-accent-strong); text-decoration: underline; }
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link: visually hidden until focused. Uses clip (not top: -N) so
+   Safari's rubber-band overscroll at the top of the page cannot reveal it. */
+.skip-link {
+  position: absolute;
+  left: var(--space-3);
+  top: var(--space-3);
+  z-index: 200;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-weight: bold;
+  border-radius: var(--radius-sm);
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  clip: auto;
+  overflow: visible;
+  text-decoration: none;
+}
+
+/* =========================================================================
+   Header + navigation
+   ========================================================================= */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-header-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+  min-height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Brand wordmark only (no mark icon / subtitle). */
+.brand {
+  display: flex;
+  align-items: center;
+  color: var(--color-text);
+  flex: 0 0 auto;
+  order: 0;              /* always first: brand pinned to the left */
+}
+.brand:hover { text-decoration: none; color: var(--color-accent); }
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.67rem;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+.header-controls {
+  /* Ordered AFTER the nav via flex `order`. margin-left:auto pins the group
+     to the right when the nav collapses (see the breakpoint block). */
+  order: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+}
+
+/* The visible text label inside the toggle is hidden in the header (icon-only)
+   and revealed only when JS moves the button into the menu (see breakpoint). */
+.theme-toggle-label { display: none; }
+
+/* Theme toggle: an icon button sized to match the hamburger exactly. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.theme-toggle:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
+}
+/* Show the icon that represents the theme you'd switch TO:
+     dark theme  -> show the sun  (click = go light)
+     light theme -> show the moon (click = go dark)
+   Exactly one icon is ever visible; the other is removed from layout. The
+   reveal rules below set `display: block` on the active icon (which also
+   removes the inline-SVG baseline gap), so no generic `svg { display }` rule
+   is needed here -- adding one would out-specify the hide rule and show both. */
+.icon-sun,
+.icon-moon { display: none; }
+html[data-theme="dark"]  .theme-toggle .icon-sun  { display: block; }
+html[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
+/* margin-left:auto pushes the nav (and the controls after it) to the right.
+   order:1 keeps it between the brand (0) and the controls (2). */
+.primary-nav { margin-left: auto; order: 1; }
+.primary-nav ul {
+  list-style: none;
+  display: flex;
+  /* nowrap is the core of the "never two lines" fix: the inline nav can only
+     ever be a single row. Below the breakpoint it collapses to the hamburger
+     instead of wrapping. Link padding/size are tuned so all 11 links fit. */
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+}
+.primary-nav a {
+  display: block;
+  padding: var(--space-2) var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  white-space: nowrap;   /* a single link never breaks mid-word */
+}
+.primary-nav a:hover {
+  color: var(--color-text);
+  background: var(--color-surface-hover);
+  text-decoration: none;
+}
+/* Active route highlight (JS adds .active to the matching link). */
+.primary-nav a.active {
+  color: var(--color-accent);
+  border-color: var(--color-border);
+  background: var(--glow-teal);
+}
+
+/* Unobtrusive marker for off-site nav links. Decorative only (aria-hidden in
+   the markup); sits tight against the label so it reads as part of the link. */
+.nav-external {
+  margin-left: 0.2em;
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+/* Hamburger button -- hidden while the inline nav fits, shown once it collapses.
+   Lives inside .header-controls, so no margin trickery is needed for position. */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  /* justify-content centers the three bars on the button's MAIN (vertical)
+     axis. Without it the column defaults to flex-start, packing the bars to
+     the top: the 22px content box (44px - 20px padding - 2px border) holds only
+     16px of bars (3x2px + 2x5px gap), so ~6px of dead space collected BELOW and
+     the bars -- and the rotated X in the open state, whose transform origin is
+     that same stack -- sat visibly high. Centering splits the slack 3px/3px so
+     both the hamburger and the X are vertically centered. */
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.nav-toggle-bar {
+  height: 2px;
+  width: 100%;
+  background: var(--color-text);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+/* Morph the three bars into an X when the menu is open. */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Backdrop scrim behind the OPEN hamburger menu. It is one permanently-present
+   element (app.js only flips .open on it) so both directions can cross-fade
+   instead of popping in on first use. `display: none` here is the "never above
+   the nav breakpoint" half of the contract: with the inline nav there is no
+   panel to push the page behind, so the scrim must not exist at all. The
+   breakpoint block at the bottom of this file turns it on. */
+.nav-scrim { display: none; }
+
+/* =========================================================================
+   Main layout + hero
+   ========================================================================= */
+#app {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5) var(--space-8);
+  outline: none;
+}
+
+/* Page hero rendered from front matter (title + subtitle). */
+.page-hero {
+  margin-bottom: var(--space-7);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+.page-hero .eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-accent);
+  margin: 0 0 var(--space-3);
+}
+.page-hero h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.page-hero .subtitle {
+  font-size: var(--fs-lg);
+  color: var(--color-text-muted);
+  margin: var(--space-4) 0 0;
+  max-width: 60ch;
+}
+
+/* Entrance animation for rendered content (respects reduced motion below). */
+.page-content { animation: fade-up 0.5s ease both; }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================================
+   Content typography (output of the Markdown renderer)
+   ========================================================================= */
+.page-content h1,
+.page-content h2,
+.page-content h3,
+.page-content h4 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  margin: var(--space-6) 0 var(--space-3);
+}
+.page-content h1 { font-size: var(--fs-h1); }
+.page-content h2 {
+  font-size: var(--fs-h2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+/* Content often puts a Markdown "---" divider immediately before an ##
+   heading. That emits <hr> AND the h2 still draws its own border-top --
+   a double rule. Drop the heading border when an hr already separates. */
+.page-content hr + h2 {
+  border-top: none;
+  padding-top: 0;
+}
+/* Same idea inside split columns (hr and h2 are nested, not direct
+   .page-content children, but the adjacent-sibling relationship holds). */
+.split-col hr + h2 {
+  border-top: none;
+  padding-top: 0;
+}
+.page-content h3 { font-size: var(--fs-h3); color: var(--color-text); }
+.page-content h4 { font-size: var(--fs-h4); color: var(--color-accent); }
+.page-content > *:first-child { margin-top: 0; }
+
+.page-content p { margin: 0 0 var(--space-4); }
+.page-content ul,
+.page-content ol { margin: 0 0 var(--space-4); padding-left: var(--space-6); }
+.page-content li { margin-bottom: var(--space-2); }
+
+.page-content strong { color: var(--color-strong); }
+.page-content em { color: var(--color-secondary); font-style: italic; }
+
+.page-content blockquote {
+  margin: var(--space-5) 0;
+  padding: var(--space-3) var(--space-5);
+  border-left: 4px solid var(--color-accent);
+  background: var(--glow-teal);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+/* Blockquotes now wrap their text in <p> elements (so multi-paragraph and
+   multi-line quotes render faithfully). Trim the outer paragraph margins so
+   the quote's own padding controls its spacing. */
+.page-content blockquote p { margin: 0; }
+.page-content blockquote p + p { margin-top: var(--space-3); }
+
+/* Inline code + fenced code blocks. */
+.page-content code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-bg-inset);
+  border: 1px solid var(--color-border);
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+}
+.page-content pre {
+  background: var(--color-bg-inset);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-5);
+}
+.page-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.page-content hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-6) 0;
+}
+
+.page-content img {
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  margin: var(--space-4) 0;
+}
+
+/* Pipe tables. */
+.page-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-5);
+  font-size: 0.95rem;
+}
+.page-content th,
+.page-content td {
+  text-align: left;
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+.page-content th {
+  font-family: var(--font-display);
+  color: var(--color-accent);
+  border-bottom: 2px solid var(--color-border);
+}
+.page-content tbody tr:nth-child(even) { background: var(--color-bg-inset); }
+
+/* =========================================================================
+   Cards (opt-in via Markdown blockquote-of-links or plain sections)
+   -------------------------------------------------------------------------
+   A generic "card grid" utility the content can trigger by wrapping items.
+   The renderer promotes top-level h3 sections after an "## " heading into a
+   readable flow; explicit card styling is applied to link lists on Resources.
+   ========================================================================= */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-5) 0;
+}
+.card {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+  box-shadow: var(--shadow);
+}
+
+/* =========================================================================
+   Split section -- opt-in Markdown directive ( ::: split ... ||| ... ::: )
+   -------------------------------------------------------------------------
+   Two columns: content on one side, media on the other. Stacks to a single
+   column on narrow screens. The `.split--flip` variant swaps the visual order
+   so the image can sit on the left instead. See the renderer in app.js and
+   the syntax docs in README.
+   ========================================================================= */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: center;
+  margin: var(--space-6) 0;
+}
+.split-col { min-width: 0; } /* let long content shrink instead of overflowing */
+.split-col > *:first-child { margin-top: 0; }
+.split-col > *:last-child { margin-bottom: 0; }
+.split-col img { width: 100%; margin: 0; }
+/* Flip variant: render the SECOND column visually first. */
+.split--flip .split-media { order: -1; }
+
+/* One-column variant: emitted by the renderer when a split has no "|||"
+   separator (and thus no media column). Render the single content column at
+   full width instead of squeezing it into a 50% track beside an empty box. */
+.split--single { grid-template-columns: 1fr; }
+
+@media (max-width: 720px) {
+  /* Stack on narrow screens; flip no longer matters once single-column. */
+  .split { grid-template-columns: 1fr; gap: var(--space-4); }
+  .split--flip .split-media { order: 0; }
+}
+
+/* =========================================================================
+   Accordion -- opt-in Markdown directive ( ::: accordion Title ... ::: )
+   -------------------------------------------------------------------------
+   Native <details>/<summary>, so open/close works with no JavaScript and
+   keeps keyboard + screen-reader behavior. Styled to match cards/borders
+   elsewhere; the chevron is a CSS ::after on the summary.
+   ========================================================================= */
+.accordion {
+  margin: var(--space-4) 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  overflow: hidden;
+}
+.accordion + .accordion {
+  margin-top: calc(var(--space-4) * -1 + var(--space-2));
+}
+.accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: bold;
+  color: var(--color-strong);
+  cursor: pointer;
+  list-style: none; /* hide the default disclosure triangle */
+  transition: background 0.15s ease;
+}
+.accordion summary::-webkit-details-marker { display: none; }
+.accordion summary::marker { content: ""; }
+.accordion summary:hover { background: var(--color-surface-hover); }
+.accordion summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+/* Open/closed chevron. Rotates when the <details> is open. */
+.accordion summary::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.55em;
+  height: 0.55em;
+  border-right: 2px solid var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text-muted);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+.accordion[open] summary::after {
+  transform: rotate(225deg);
+}
+.accordion-body {
+  padding: 0 var(--space-5) var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+.accordion-body > *:first-child { margin-top: var(--space-4); }
+.accordion-body > *:last-child { margin-bottom: 0; }
+/* Same entrance as .page-content when the panel opens. Re-runs each time
+   the <details> gains [open]; reduced-motion rules below still apply. */
+.accordion[open] .accordion-body {
+  animation: fade-up 0.5s ease both;
+}
+
+/* =========================================================================
+   Logo grid -- opt-in Markdown directive ( ::: logos ... ::: )
+   -------------------------------------------------------------------------
+   Responsive grid of organization logos. Cells share a fixed height so logos
+   of different aspect ratios get similar visual weight; object-fit:contain
+   preserves aspect ratio without cropping or distorting.
+   ========================================================================= */
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-5) var(--space-6);
+  align-items: center;
+  justify-items: center;
+  margin: var(--space-6) 0;
+  padding: var(--space-5) 0;
+}
+.logo-grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 180px;
+  height: 88px;
+  padding: var(--space-3);
+  box-sizing: border-box;
+  /* White plate so transparent PNGs/SVGs stay readable in dark theme. */
+  background: #fff;
+}
+.logo-grid-item img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin: 0;
+  /* Undo .page-content img border/radius -- logos sit on the white plate. */
+  border: none;
+  border-radius: 0;
+}
+
+@media (max-width: 720px) {
+  .logo-grid {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: var(--space-4);
+  }
+  .logo-grid-item {
+    max-width: 140px;
+    height: 72px;
+    padding: var(--space-2);
+  }
+}
+
+/* =========================================================================
+   Call-to-action button -- opt-in Markdown directive ([[button: Label -> url]])
+   -------------------------------------------------------------------------
+   A large, prominent link styled as a filled accent button. Works in both
+   themes (ink color flips via --color-accent-contrast).
+   ========================================================================= */
+.cta-button {
+  display: inline-block;
+  margin: var(--space-4) var(--space-3) var(--space-4) 0;
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: bold;
+  line-height: 1.2;
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.cta-button:hover {
+  color: var(--color-accent-contrast);
+  background: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.cta-button:focus-visible {
+  outline: 3px solid var(--color-accent-strong);
+  outline-offset: 3px;
+}
+
+/* =========================================================================
+   Photos page -- filter chips, grid, lightbox
+   ========================================================================= */
+.photos-intro { margin-bottom: var(--space-5); }
+
+.album-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-5) 0 var(--space-6);
+}
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg-raised);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+.chip:hover { color: var(--color-text); border-color: var(--color-accent); }
+.chip[aria-pressed="true"] {
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  font-weight: bold;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+.photo-tile {
+  position: relative;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--color-bg-raised);
+  aspect-ratio: 4 / 3;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.photo-tile:hover,
+.photo-tile:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.photo-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Undo .page-content img margin/border -- those left a gap above each tile. */
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+/* Caption bar slides up on hover/focus. */
+.photo-tile figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-3);
+  font-size: 0.85rem;
+  background: linear-gradient(transparent, rgba(4, 8, 18, 0.92));
+  color: #fff;
+  transform: translateY(100%);
+  transition: transform 0.25s ease;
+}
+.photo-tile:hover figcaption,
+.photo-tile:focus-visible figcaption { transform: translateY(0); }
+
+.photo-album-tag {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(11, --, 32, 0.8);
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
+}
+
+/* Lightbox overlay. Hidden via [hidden]; JS toggles it. */
+.lightbox[hidden] { display: none; }
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  background: rgba(4, 8, 18, 0.92);
+  backdrop-filter: blur(4px);
+  /* The lightbox is an always-dark "theater" overlay in BOTH themes. Re-pin
+     the themed variables it consumes to dark values so its caption/buttons
+     stay legible on the dark backdrop even while the page is in light mode
+     (otherwise --color-text would be dark-on-dark and vanish). */
+  --color-text: #e7ecf5;
+  --color-text-muted: #9aa7c2;
+  --color-border: #24304d;
+  --color-accent: #38e0c8;
+}
+.lightbox-figure {
+  margin: 0;
+  max-width: min(900px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.lightbox-figure img {
+  max-height: 74vh;
+  width: auto;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+}
+.lightbox-caption {
+  text-align: center;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+.lightbox-caption .album { color: var(--color-accent); font-family: var(--font-mono); font-size: 0.8rem; }
+
+.lightbox-btn {
+  position: absolute;
+  background: rgba(18, 26, 46, 0.9);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-btn:hover { color: var(--color-accent); border-color: var(--color-accent); }
+.lightbox-close { top: var(--space-5); right: var(--space-5); }
+.lightbox-prev { left: var(--space-4); top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: var(--space-4); top: 50%; transform: translateY(-50%); }
+
+/* =========================================================================
+   Error / 404 states
+   ========================================================================= */
+.page-error {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-danger);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  margin-top: var(--space-6);
+}
+.page-error h1 { font-family: var(--font-display); margin-top: 0; color: var(--color-danger); }
+.page-error code {
+  font-family: var(--font-mono);
+  background: var(--color-bg-inset);
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+}
+
+/* =========================================================================
+   Footer
+   ========================================================================= */
+.site-footer {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  margin-top: var(--space-8);
+}
+.footer-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5);
+}
+.footer-brand { font-family: var(--font-display); font-weight: bold; margin: 0 0 var(--space-2); }
+.footer-note { color: var(--color-text-muted); font-size: 0.9rem; margin: 0; }
+
+/* --- Footer social links --------------------------------------------------
+   Rendered by app.js from content/socials.txt (name | url per line). The row
+   is hidden until at least one link is injected, so a missing/empty manifest
+   degrades to no row rather than an empty gap. Icons are inline SVG (no
+   network requests) and inherit currentColor so they theme automatically. */
+.footer-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-5);
+}
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-muted);
+  background: var(--color-bg-inset);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+.social-link:hover,
+.social-link:focus-visible {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+.social-link svg { width: 20px; height: 20px; display: block; }
+/* Fallback label for a social network with no built-in icon. */
+.social-link .social-fallback {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0 var(--space-1);
+}
+.footer-socials .social-link:has(.social-fallback) { width: auto; padding: 0 var(--space-3); }
+
+/* =========================================================================
+   Responsive -- nav collapses to the hamburger
+   -------------------------------------------------------------------------
+   The single breakpoint below is the ONLY place the nav switches modes:
+     - above it: all 11 links sit on one inline row (flex-wrap:nowrap);
+     - at/below it: the inline row is hidden and the hamburger + slide-down
+       panel take over.
+   There is no width at which the links wrap onto a second line. The value
+   (1180px) was chosen by measuring the inline row's natural width so the
+   links never crowd the brand; nudge it if you add/remove nav items.
+   The theme toggle is always reachable: above this breakpoint it sits in the
+   header at far right; at/below it, app.js MOVES the same button into the
+   slide-down menu as a labelled row (matchMedia keeps the 1180px thresholds in
+   sync). It is one DOM node, so its aria state can never desync between homes.
+   ========================================================================= */
+@media (max-width: 1180px) {
+  .nav-toggle { display: flex; }
+
+  /* With the nav collapsed to position:absolute it no longer pushes the header
+     controls right via its own margin, so pin the controls group to the right
+     here. This keeps the hamburger flush against the header's right gutter at
+     every collapsed width (verified 1180 / 1024 / 768 / 480 / 360). */
+  .header-controls { margin-left: auto; }
+
+  /* Collapse the nav into a dropdown panel below the header. */
+  .primary-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    background: var(--color-bg-raised);
+    border-bottom: 1px solid var(--color-border);
+    max-height: 0;
+    overflow: hidden;
+    /* max-height:0 + overflow:hidden only hide the panel VISUALLY -- the links
+       and the relocated theme toggle stay in the tab order, so keyboard users
+       tabbing off the hamburger fall into an invisible menu. visibility:hidden
+       is what actually removes them from the tab order (and from hit-testing).
+       It is used instead of display:none / content-visibility because it is the
+       only "unfocusable" switch that still animates: visibility interpolates
+       DISCRETELY but stays at the visible endpoint for the whole duration, so
+       listing it in the transition below keeps the panel on screen while the
+       max-height collapse plays and flips it to hidden exactly at the end.
+       Without it in the transition the panel would vanish instantly on close
+       and the 0.3s collapse would never be seen. */
+    visibility: hidden;
+    transition: max-height 0.3s ease, visibility 0.3s ease;
+  }
+  /* JS adds .open to the <nav> when the hamburger is toggled on.
+     padding-bottom gives the relocated theme-toggle row breathing room from the
+     panel's bottom edge: the toggle is appended AFTER the <ul>, OUTSIDE the ul's
+     var(--space-3) padding, so without this it landed hard on the border. It
+     matches the ul's var(--space-3) top/side inset so the menu's internal
+     padding reads as symmetric on every edge. It sits on the OPEN state (a nav
+     CONTAINER selector, scoped inside this breakpoint) NOT on the moved node, so
+     it never travels with the button when JS re-homes it to the header above
+     1180px. Critically it must NOT be on the base .primary-nav: with
+     box-sizing:border-box, max-height:0 clamps only the CONTENT box to 0 while
+     padding+border remain, so base padding would leave a ~13px strip showing
+     below the header even while closed (a layout shift). Applying it only when
+     open keeps the closed panel a clean 0-height (just its 1px border).
+     visibility:visible re-admits the links + theme toggle to the tab order.
+     Because visibility's discrete interpolation keeps the VISIBLE end of the
+     pair applied for the whole transition, the panel is focusable and painted
+     immediately on open and stays painted until the collapse finishes on
+     close -- one property fixes the tab-order leak without costing the
+     animation. */
+  .primary-nav.open {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-bottom: var(--space-3);
+    visibility: visible;
+  }
+  /* Stack vertically in the panel; restore comfortable tap targets. */
+  .primary-nav ul { flex-direction: column; flex-wrap: nowrap; padding: var(--space-3); gap: 2px; }
+  .primary-nav a { padding: var(--space-3) var(--space-4); font-size: 1rem; }
+
+  /* --- Theme toggle relocated INTO the open menu ---
+     app.js appends the toggle to #primary-nav below this breakpoint. Restyle
+     it from a compact icon square into a full-width menu row: icon + visible
+     label, left-aligned, matching the nav links' rhythm. */
+  .primary-nav .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-3);
+    width: auto;
+    height: auto;
+    margin: var(--space-2) var(--space-3) 0;
+    padding: var(--space-3) var(--space-4);
+    border-color: var(--color-border);
+    /* A hairline above separates the appearance row from the page links. */
+    border-top: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  .primary-nav .theme-toggle:hover { color: var(--color-accent); }
+  /* Reveal the text label only in this in-menu placement. */
+  .primary-nav .theme-toggle .theme-toggle-label { display: inline; }
+  /* The icon keeps its intrinsic 20px box; nudge it to align with the label. */
+  .primary-nav .theme-toggle svg { flex: 0 0 auto; }
+
+  /* --- Backdrop scrim, only in the collapsed (hamburger) mode ---
+     Exists ONLY inside this breakpoint: above 1180px the base rule's
+     `display: none` applies and there is no scrim node in the layout at all.
+     z-index sits between the sticky header (100) and the lightbox (300), so
+     the scrim always covers the page yet never veils the photo viewer -- the
+     lightbox stays the topmost overlay with its own backdrop. `top:
+     var(--header-h)` starts the veil just below the header so the brand and
+     hamburger stay at full contrast (you can still see what you're closing).
+     Opacity (not display) is toggled so both directions cross-fade on the same
+     0.3s curve as the panel's max-height collapse; visibility rides along in
+     the transition to keep the faded-out scrim from swallowing clicks. */
+  .nav-scrim {
+    display: block;
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    background: var(--color-scrim);
+    /* Blur is PROGRESSIVE ENHANCEMENT only: --color-scrim's alpha carries the
+       whole "page is pushed back" effect on its own, so browsers without
+       backdrop-filter (or with it disabled) still get correct darkening. */
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  /* app.js keeps .open on the scrim in lockstep with the nav panel. */
+  .nav-scrim.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@media (max-width: 520px) {
+  #app { padding: var(--space-5) var(--space-4) var(--space-7); }
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

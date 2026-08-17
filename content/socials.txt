@@ -1,0 +1,12 @@
+# Duke Debate -- social links (footer icons)
+# ---------------------------------------------------------------------------
+# One link per line:
+#     name | url
+# Known icon names: Email, Instagram, YouTube, GitHub, LinkedIn
+# (any other name still works as a text label).
+# Use https://... or mailto:... . "#" lines are comments. Blank lines are fine.
+# Remove a line to drop that icon; an empty/missing file hides the whole row.
+# ---------------------------------------------------------------------------
+
+Email     | mailto:nathanael.ren@duke.edu
+Instagram | https://www.instagram.com/duke.debate/

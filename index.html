@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Not the site -- Duke Debate</title>
+  <meta name="robots" content="noindex" />
+
+  <!-- ==========================================================================
+       THIS FILE IS NOT THE WEBSITE ANY MORE. It is a signpost, on purpose.
+
+       The site used to be a single-page app: this file was the shell and
+       js/app.js fetched content/*.md into it at runtime. That is gone. Every
+       page is now BUILT ahead of time by build.mjs into dist/, one real HTML
+       file per page (dist/index.html, dist/about/index.html, ...), so the words
+       are in the HTML before any JavaScript runs.
+
+       Two consequences worth knowing before you edit anything here:
+
+       1. NOTHING READS THIS FILE. build.mjs does not open it -- the page shell
+          (header, nav, footer, theme bootstrap) lives as a template inside
+          build.mjs itself, which is the ONE place to change it. Editing this
+          file changes nothing about the published site; that silent no-op is
+          exactly why the old shell markup was removed from here rather than
+          left lying around to drift out of sync.
+       2. This file is not published. build.mjs only copies css/, js/ and
+          assets/ into dist/, so what you are reading never reaches a visitor.
+
+       To preview or publish the real site, see the pointers below (and README).
+       ========================================================================== -->
+
+  <!-- Same theme bootstrap the real pages use, so this notice matches the
+       visitor's light/dark preference instead of flashing white at them. -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+        var theme = (saved === "light" || saved === "dark")
+          ? saved
+          : (prefersLight ? "light" : "dark");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (err) {
+        // localStorage/matchMedia unavailable -- fall back to the dark default.
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+
+  <!-- RELATIVE on purpose, unlike the built pages' "/css/style.css": this file
+       is only ever opened straight from the repo, including by double-click
+       over file://, where a leading "/" would point at the filesystem root. -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <!-- No header, no nav, no footer here. Every link in the old copy of them
+       pointed at a route ("#/about") that no longer exists, so they would all
+       have been dead. The real nav is built into each page in dist/. -->
+  <main id="app" tabindex="-1">
+    <section class="page-error">
+      <h1>This isn't the site</h1>
+
+      <p>
+        You've opened the project's placeholder file. The Duke Debate
+        pages are built from the text files in <code>content/</code> into a
+        <code>dist/</code> folder, and that folder is the actual website.
+      </p>
+
+      <p>
+        <strong>To see the site,</strong> run this in a terminal from the
+        project folder -- it builds the pages and then serves them:
+      </p>
+
+      <pre><code>./serve.sh</code></pre>
+
+      <p>
+        Then open <code>http://localhost:8000/</code>. Re-run it after you edit
+        anything in <code>content/</code>. Full instructions, including how to
+        add a page, are in <code>README.md</code>.
+      </p>
+
+      <p>
+        Nothing on this page needs JavaScript, and neither do the real pages --
+        their words are in the HTML. JavaScript only adds the extras: the
+        dark/light toggle, the collapsing menu, and the photo gallery's filters
+        and lightbox.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
